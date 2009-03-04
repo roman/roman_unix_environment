@@ -1,0 +1,34 @@
+#!/bin/bash
+
+if [ -a ~/.bashrc ] && ! [ -h ~/.bashrc ]; then
+	echo 'Making backup of .bashrc'
+	mv ~/.bashrc ~/.original.bashrc
+fi
+
+if [ -a ~/.bash_profile ] && ! [ -h ~/.bash_profile ]; then
+	echo 'Making backup of .bash_profile'
+	mv ~/.bash_profile ~/.original.bash_profile
+fi
+
+if [ -a ~/.inputrc ] && ! [ -h ~/.inputrc ]; then
+	echo 'Making backup of .inputrc'
+	mv ~/.inputrc ~/.original.inputrc
+fi
+
+if [ -a ~/.irbrc ] && ! [ -h ~/.irbrc ]; then
+	echo 'Making backup of .irbrc'
+	mv ~/.irbrc ~/.original.irbrc
+fi
+
+if [ -a ~/.screenrc ] && ! [ -h ~/.screenrc ]; then
+	echo 'Making backup of .screenrc'
+	mv ~/.screenrc ~/.original.screenrc
+fi
+
+mkdir -p ~/.ssh
+ln -fs `pwd`/bashrc ~/.bashrc
+ln -fs `pwd`/bashprofile ~/.bash_profile 
+ln -fs `pwd`/inputrc ~/.inputrc
+ln -fs `pwd`/irbrc ~/.irbrc
+ln -fs `pwd`/screenrc ~/.screenrc
+

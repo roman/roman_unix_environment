@@ -1,0 +1,32 @@
+#==============================================================================
+# SCREENRC
+#   Settings for 'screen'
+#
+#==============================================================================
+
+# Quiet startup
+startup_message off
+
+# UTF-8 
+defutf8 on
+
+# Set the activation key to ^-[backtick] (`)
+escape ``
+
+# Disable alternate screen mode, so that the terminal scrollback buffer is used
+# termcap xterm* ti@:te@
+# terminfo xterm* ti@:te@
+termcapinfo * 'ti@:te@'
+
+# set these terminals up to be 'optimal' instead of vt100
+termcapinfo xterm*|linux*|rxvt*|Eterm* OP
+
+# Define a pretty hardstatus line
+hardstatus alwayslastline "%H :: %-Lw%{= Bw}%50>%n%f* %h%{-}%+Lw%<"
+
+# Large scrollback buffer
+defscrollback 32000
+
+
+#bindkey ^K digraph "'"
+#bindkey ^N digraph "~"

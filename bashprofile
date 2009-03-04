@@ -1,0 +1,121 @@
+#==============================================================================
+# BASH PROFILE
+#   This file is run once per "login". It should be used to define global environment
+#   variables that remain mostly unchanged.
+#
+#   Anything that is not export'ed should be defined in bashrc, not here, since
+#   it will not be passed onto other shells
+#   
+#   This file is not executed on 'non-login' shells, like bash scripts, scp, 
+#   ssh commands (but it is on ssh # logins)
+
+#==============================================================================
+#-- General Environment ------------------------------------
+if [ "$ORIGINALUSER" = "" ]; then
+  export ORIGINALUSER=$USER
+  export ORIGINALUID=$UID
+  export ORIGINALHOME=$HOME
+else
+  # Some systems won't set $HOME to the new user's home, because we're running under sudo
+  export HOME=`finger ~$USER |grep Directory| cut -d " " -f 2`
+fi
+
+if [ "$ENVIRONMENT" = "" ]; then
+  if [ $(uname) = Darwin ]; then
+    export ENVIRONMENT="OSX"
+							  
+    export PATH=/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/sbin:/usr/local/git/bin
+    export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+    # Fink Environment
+    if [ -r /sw/bin/init.sh ]; then
+      source /sw/bin/init.sh
+    fi
+
+    # DarwinPorts
+    if [ -d /opt/local/bin ]; then
+      export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+      export MANPATH=/opt/local/share/man:$MANPATH
+      export INFOPATH=/opt/local/share/man:$INFOPATH
+    fi
+  elif [ "$OSTYPE" = "linux-gnu" ]; then
+    export ENVIRONMENT="Linux"
+  
+    export PATH=/usr/bin:/bin:/usr/sbin:/sbin:~/bin
+  elif [ "$OSTYPE" = "solaris2.9" ]; then
+    export ENVIRONMENT="Solaris" 
+
+  elif [ "$OSTYPE" = "cygwin" ]; then
+    export ENVIRONMENT="Win32 Cygwin"
+  else 
+    export ENVIRONMENT="Unknown"
+  fi
+fi
+
+export PATH=~/bin:/usr/local/bin:$PATH
+
+# Ignore anything that starts with a space, or bg/fg, or exit
+#export HISTIGNORE="[ \t]*"
+# I like a long history
+export HISTSIZE=1000
+export HISTFILESIZE=500
+# And let's append, not overwrite, so we don't lose history when using multiple terminals
+shopt -s histappend
+# Enable multiline commands in history
+shopt -s cmdhist
+# Edit substituted commands before executing
+shopt -s histverify
+
+function history_help {
+  echo "Command Selection"
+  echo "      !! - Last command          !-n - nth previous command"
+  echo "Substring Selection"
+  echo "    !!:$ - Last word (or !$)"
+  echo "    !!:^ - First word (not zeroth, the command)"
+  echo "    !!:n - nth word"
+  echo "  !!:n-m - nth to mth words"
+  echo "    !!:* - All words except zeroth"
+  echo "Modifiers (!!:n:modifier)"
+  echo "    :h - Remove trailing pathname (head)   :t - Remove leading pathname (tail)"
+  echo "    :r - Remove trailing extension         :e - Remove all but extension"
+}
+#==============================================================================
+#-- Editors & Programs --------------------------------------------------------
+if [ -f /usr/bin/mate ]; then
+	export EDITOR="/usr/bin/mate -w"
+elif [ -f /usr/bin/pico ]; then
+  export EDITOR="/usr/bin/pico -w"
+elif [ -f /usr/local/bin/pico ]; then
+  export EDITOR="/usr/local/bin/pico -w"
+elif [ -f /usr/bin/nano ]; then
+  export EDITOR="/usr/bin/nano -w"
+elif [ -f /usr/local/bin/nano ]; then
+  export EDITOR="/usr/local/bin/nano -w"
+fi
+
+export CVS_RSH=ssh
+
+
+#==============================================================================
+#-- BASH RC -------------------------------------------------------------------
+if [ -f $ORIGINALHOME/.bashrc ]; then
+  source $ORIGINALHOME/.bashrc
+fi
+
+#==============================================================================
+if [ "$SSH_TTY" ]; then
+  # If this is a remote session, then start screen
+  if [ "$TERM" != "screen" ]; then
+    echo -ne "${XTERM_SET_TITLE}screen for `whoami`@`hostname -s`${XTERM_END}"
+    echo -ne "${ITERM_SET_TAB}[`hostname -s`]${ITERM_END}"
+    screen -xRRU
+    if [ "$?" = "0" ]; then
+      reset
+      exit
+    fi
+  fi
+#==============================================================================
+#else
+  # Otherwise set this session's environment
+  
+#==============================================================================
+fi

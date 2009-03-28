@@ -175,5 +175,5 @@ function promptcommand {
 
 PROMPT_COMMAND="promptcommand"
 
-export PS1="\[${ANSIRESET}\]\[${CWD_COLOR}\]\t  \u @ \h [\w\$(parse_git_branch)]\[${ANSIRESET}\]  \[${ANSIRED}\]\${PROMPT_MSG}\]${ANSIRESET}\]\n\[${PROMPT_COLOR}\]${WINDOW_MSG}\! \$\[${ANSIRESET}\] "
+export PS1="\[${ANSIRESET}\]\[${CWD_COLOR}\]\t  \u @ \h \$(parse_git_branch)[\w]\[${ANSIRESET}\]  \[${ANSIRED}\]\${PROMPT_MSG}\]${ANSIRESET}\]\n\[${PROMPT_COLOR}\]${WINDOW_MSG}\! \$\[${ANSIRESET}\] "
 

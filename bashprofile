@@ -24,7 +24,7 @@ if [ "$ENVIRONMENT" = "" ]; then
   if [ $(uname) = Darwin ]; then
     export ENVIRONMENT="OSX"
 							  
-    export PATH=/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/sbin:/usr/local/git/bin
+    export PATH=/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/sbin:/usr/local/git/bin:/usr/texbin
     export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
     # Fink Environment
     if [ -r /sw/bin/init.sh ]; then
@@ -82,6 +82,8 @@ function history_help {
 #-- Editors & Programs --------------------------------------------------------
 if [ -f /usr/bin/mate ]; then
 	export EDITOR="/usr/bin/mate -w"
+elif [ -f /usr/bin/vim ]; then
+	export EDITOR="/usr/bin/vim -w"
 elif [ -f /usr/bin/pico ]; then
   export EDITOR="/usr/bin/pico -w"
 elif [ -f /usr/local/bin/pico ]; then
